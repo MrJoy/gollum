@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '1.0.1'
-  s.date              = '2010-08-12'
+  s.date              = '2010-09-03'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
     gollum.gemspec
     lib/gollum.rb
     lib/gollum/albino.rb
+    lib/gollum/blob_entry.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
     lib/gollum/frontend/public/css/editbar.css
