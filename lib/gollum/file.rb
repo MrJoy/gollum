@@ -33,6 +33,11 @@ module Gollum
     # Public: The String path of the file.
     attr_reader :path
 
+    # Public: The String mime type of the file.
+    def mime_type
+      @blob.mime_type
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -49,9 +54,9 @@ module Gollum
       checked = name.downcase
       map     = @wiki.tree_map_for(version)
       sha     = @wiki.ref_map[version] || version
-      if pair = map.detect { |(path, _)| path.downcase == checked }
+      if entry = map.detect { |entry| entry.path.downcase == checked }
         @path    = name
-        @blob    = Grit::Blob.create(@wiki.repo,   :id => pair.last, :name => ::File.basename(@path))
+        @blob    = Grit::Blob.create(@wiki.repo,   :id => entry.sha, :name => entry.name)
         @version = Grit::Commit.create(@wiki.repo, :id => sha)
         self
       end
