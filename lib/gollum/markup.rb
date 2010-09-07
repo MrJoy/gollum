@@ -15,6 +15,7 @@ module Gollum
       @version = page.version.id
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
+      @dynamictagmap  = {}
       @codemap = {}
       @texmap  = {}
     end
@@ -165,12 +166,12 @@ module Gollum
     def extract_dynamic_tags(data)
       data.gsub(/(.?)\{\{(.+?)\}\}([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
-          "{{#{$2}}}#{$3}"
-        elsif $2.include?('}{')
+          "\{\{#{$2}\}\}#{$3}"
+        elsif $2.include?('}{[')
           $&
         else
           id = Digest::SHA1.hexdigest($2)
-          @tagmap[id] = $2
+          @dynamictagmap[id] = $2
           "#{$1}#{id}#{$3}"
         end
       end
@@ -183,7 +184,7 @@ module Gollum
     #
     # Returns the marked up String data.
     def process_dynamic_tags(data)
-      @tagmap.each do |id, tag|
+      @dynamictagmap.each do |id, tag|
         data.gsub!(id, process_dynamic_tag(tag))
       end
       data
