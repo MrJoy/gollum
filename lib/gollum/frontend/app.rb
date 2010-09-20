@@ -59,7 +59,7 @@ module Precious
       format = params[:format].intern
       name   = params[:rename] if params[:rename]
 
-      wiki.update_page(page, name, format, params[:content], commit_message)
+      wiki.update_page(page, name, format, params[:content], commit_message(wiki))
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
