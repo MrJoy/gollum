@@ -59,7 +59,7 @@ module Precious
       format = params[:format].intern
       name   = params[:rename] if params[:rename]
 
-      wiki.update_page(page, name, format, params[:content], commit_message(wiki))
+      wiki.update_page(page, name, format, params[:content], commit_message)
 
       redirect "/#{CGI.escape(Gollum::Page.cname(name))}"
     end
@@ -71,7 +71,7 @@ module Precious
       format = params[:format].intern
 
       begin
-        wiki.write_page(name, format, params[:content], commit_message(wiki))
+        wiki.write_page(name, format, params[:content], commit_message)
         redirect "/#{CGI.escape(name)}"
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
@@ -157,10 +157,8 @@ module Precious
       end
     end
 
-    def commit_message(wiki)
-      { :message => params[:message],
-        :name    => wiki.repo.config['user.name'],
-        :email   => wiki.repo.config['user.email'] }
+    def commit_message
+      { :message => params[:message] }
     end
   end
 end
