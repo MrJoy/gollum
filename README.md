@@ -174,7 +174,7 @@ Links to Gists are converted to embedded gists.
 
 The link can also be to a specific file in the gist.
 
-    [[gist//177172/pythonway.py]]
+    [[gist://177172/pythonway.py]]
 
 Additionally, links to gist.github.com are recognized and handled as well:
 
