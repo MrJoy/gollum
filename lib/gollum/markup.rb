@@ -238,7 +238,11 @@ module Gollum
     # Returns the String HTML if the tag is a valid gist link tag or nil
     #   if it is not.
     def process_gist_link_tag(tag)
-      tag.sub!(/^(?:https?:\/\/)?(gist\.github\.com\/\d+)(?:\.js)?((?:\?file=\w+(?:\.\w+)*)?)$/, '<script src="http://\1.js\2"></script>')
+      tmp = tag.sub!(/^(?:gist:\/\/)(\d+)(?:\/(.*))?$/, '<script src="http://gist.github.com/\1.js?file=\2"></script>')
+      if(tmp.nil?)
+        tmp = tag.sub!(/^(?:https?:\/\/)?(gist\.github\.com\/\d+)(?:\.js)?((?:\?file=\w+(?:\.\w+)*)?)$/, '<script src="http://\1.js\2"></script>')
+      end
+      return tmp
     end
 
     # Attempt to process the tag as a file link tag.
