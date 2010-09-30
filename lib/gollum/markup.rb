@@ -297,15 +297,6 @@ module Gollum
       end
     end
 
-    def find_page_from_name(cname)
-      if page = @wiki.page(cname)
-        return page
-      end
-      if pos = cname.index('#')
-        [@wiki.page(cname[0...pos]), cname[pos..-1]]
-      end
-    end
-
     # Find the given file in the repo.
     #
     # name - The String absolute or relative path of the file.
@@ -333,6 +324,23 @@ module Gollum
 	  pages_li = pages.map { |p| %{<li>#{process_page_link_tag(p.name)}</li>} }
         end
         %{<ul id="pages">#{pages_li}</ul>}
+      end
+    end
+
+    # Find a page from a given cname.  If the page has an anchor (#) and has
+    # no match, strip the anchor and try again.
+    #
+    # cname - The String canonical page name.
+    #
+    # Returns a Gollum::Page instance if a page is found, or an Array of 
+    # [Gollum::Page, String extra] if a page without the extra anchor data
+    # is found.
+    def find_page_from_name(cname)
+      if page = @wiki.page(cname)
+        return page
+      end
+      if pos = cname.index('#')
+        [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
     end
 
