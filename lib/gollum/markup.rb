@@ -44,9 +44,9 @@ module Gollum
         data = %{<p class="gollum-error">#{e.message}</p>}
       end
       data = process_tags(data)
-      data = process_extension_tags(data)
       data = process_code(data)
       data = Sanitize.clean(data, sanitize_options)
+      data = process_extension_tags(data)
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
