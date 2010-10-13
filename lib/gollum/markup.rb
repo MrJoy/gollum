@@ -121,7 +121,7 @@ module Gollum
     # Process all tags from the tagmap and replace the placeholders with the
     # final markup.
     #
-    # data      - The String data (with placeholders).
+    # data - The String data (with placeholders).
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
     #
@@ -143,7 +143,7 @@ module Gollum
     # Returns the String HTML version of the tag.
     def process_tag(tag, no_follow = false)
       if html = process_pages_tag(tag)
-	return html
+        return html
       elsif html = process_image_tag(tag)
         return html
       elsif html = process_gist_link_tag(tag)
@@ -249,9 +249,9 @@ module Gollum
     # Returns the String HTML if the tag is a valid gist link tag or nil
     #   if it is not.
     def process_gist_link_tag(tag)
-      tmp = tag.sub!(/^(?:gist:\/\/)(\d+)(?:\/(.*))?$/, '<script src="http://gist.github.com/\1.js?file=\2"></script>')
+      tmp = tag.sub!(/^(?:gist:\/\/)(\d+)(?:\/(.*))?$/, '<script src="http://gist.github.com/\1.js?file=\2" type="text/javascript"></script>')
       if(tmp.nil?)
-        tmp = tag.sub!(/^(?:https?:\/\/)?(gist\.github\.com\/\d+)(?:\.js)?((?:\?file=\w+(?:\.\w+)*)?)$/, '<script src="http://\1.js\2"></script>')
+        tmp = tag.sub!(/^(?:https?:\/\/)?(gist\.github\.com\/\d+)(?:\.js)?((?:\?file=\w+(?:\.\w+)*)?)$/, '<script src="http://\1.js\2" type="text/javascript"></script>')
       end
       return tmp
     end
@@ -311,7 +311,7 @@ module Gollum
         page, extra = find_page_from_name(cname)
         if page
           link_name = Page.cname(page.name)
-          presence  = "present"
+          presence = "present"
         end
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
@@ -382,7 +382,7 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
-        id     = Digest::SHA1.hexdigest($2)
+        id = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
           { :output => cached } : 
@@ -400,11 +400,11 @@ module Gollum
     def process_code(data)
       @codemap.each do |id, spec|
         formatted = spec[:output] || begin
-          lang = spec[:lang]
-          code = spec[:code]
-          if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-            code.gsub!(/^(  |\t)/m, '')
-          end
+        lang = spec[:lang]
+        code = spec[:code]
+        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
+          code.gsub!(/^(  |\t)/m, '')
+        end
           formatted = Gollum::Albino.new(code, lang).colorize
           update_cache(:code, id, formatted)
           formatted
