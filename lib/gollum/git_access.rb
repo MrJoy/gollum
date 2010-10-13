@@ -39,12 +39,16 @@ module Gollum
     end
 
     def ref_to_sha(ref)
-        @ref_map[ref] ||= ref_to_sha!(ref)
+      if sha?(ref)
+        ref
+      else
+        get_cache(:ref, ref) { ref_to_sha!(ref) }
       end
+    end
 
     def tree(ref)
       sha = ref_to_sha(ref)
-      @tree_map[sha] ||= tree!(sha)
+      get_cache(:tree, sha) { tree!(sha) }
     end
 
     def blob(sha)
@@ -53,16 +57,36 @@ module Gollum
 
     def commit(ref)
       if sha?(ref)
-        @commit_map[ref] ||= commit!(ref)
+        get_cache(:commit, ref) { commit!(ref) }
       else
-        if sha = @ref_map[ref]
+        if sha = get_cache(:ref, ref)
           commit(sha)
         else
           cm = commit!(ref)
-          @ref_map[ref]      = cm.id
-          @commit_map[cm.id] = cm
+          set_cache(:ref,    ref,   cm.id)
+          set_cache(:commit, cm.id, cm)
         end
       end
+    end
+
+    def commits(*shas)
+      shas.flatten!
+      cached_commits = multi_get(:commit, shas)
+      missing_shas   = shas.select do |sha|
+        !cached_commits.key?(sha)
+      end
+      if !missing_shas.empty?
+        missing_shas.each_slice(500) do |slice|
+          @repo.batch(slice).each do |commit|
+            cached_commits[commit.id] = commit
+          end
+        end
+      end
+      shas.map { |sha| cached_commits[sha] }
+    end
+
+    def sha?(str)
+      str =~ /^[0-9a-f]{40}$/
     end
 
     def ref_to_sha!(ref)
@@ -83,6 +107,30 @@ module Gollum
 
     def commit!(sha)
       @repo.commit(sha)
+    end
+
+    def get_cache(name, key)
+      cache = instance_variable_get("@#{name}_map")
+      value = cache[key]
+      if value.nil? && block_given?
+        set_cache(name, key, value = yield)
+      end
+      value
+    end
+
+    def set_cache(name, key, value)
+      cache      = instance_variable_get("@#{name}_map")
+      cache[key] = value
+    end
+
+    def multi_get(name, keys)
+      value = instance_variable_get("@#{name}_map")
+      keys.inject({}) do |memo, key|
+        if v = value[key]
+          memo[key] = v
+        end
+        memo
+      end
     end
 
     # Parses a line of output from the `ls-tree` command.
