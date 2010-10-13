@@ -39,8 +39,8 @@ module Gollum
     end
 
     def ref_to_sha(ref)
-      @ref_map[ref] ||= ref_to_sha!(ref)
-    end
+        @ref_map[ref] ||= ref_to_sha!(ref)
+      end
 
     def tree(ref)
       sha = ref_to_sha(ref)
@@ -52,12 +52,16 @@ module Gollum
     end
 
     def commit(ref)
-      if sha = @ref_map[ref]
-        @commit_map[sha] ||= commit!(sha)
+      if sha?(ref)
+        @commit_map[ref] ||= commit!(ref)
       else
-        cm = commit!(ref)
-        @ref_map[ref]      = cm.id
-        @commit_map[cm.id] = cm
+        if sha = @ref_map[ref]
+          commit(sha)
+        else
+          cm = commit!(ref)
+          @ref_map[ref]      = cm.id
+          @commit_map[cm.id] = cm
+        end
       end
     end
 
