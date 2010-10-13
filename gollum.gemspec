@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'gollum'
   s.version           = '1.0.1'
-  s.date              = '2010-09-03'
+  s.date              = '2010-10-11'
   s.rubyforge_project = 'gollum'
 
   s.summary     = "A simple, Git-powered wiki."
@@ -486,7 +486,6 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/0e/d8cbe0a25235bd867e65193c7d837c66b328ef
     test/examples/lotr.git/objects/24/49c2681badfd3c189e8ed658dacffe8ba48fe5
     test/examples/lotr.git/objects/2c/b9156ad383914561a8502fc70f5a1d887e48ad
-    test/examples/lotr.git/objects/30/8fdf72d89351bf53fa6eeb00884273047e07fa
     test/examples/lotr.git/objects/5d/cac289a8603188d2c5caf481dcba2985126aaa
     test/examples/lotr.git/objects/60/f12f4254f58801b9ee7db7bca5fa8aeefaa56b
     test/examples/lotr.git/objects/71/4323c104239440a5c66ab12a67ed07a83c404f
@@ -496,9 +495,7 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/aa/b61fe89d56f8614c0a8151da34f939dcedfa68
     test/examples/lotr.git/objects/c3/b43e9f08966b088e7a0192e436b7a884542e05
     test/examples/lotr.git/objects/dc/596d6b2dd89ab05c66f4abd7d5eb706bc17f19
-    test/examples/lotr.git/objects/eb/578ff8ed46c6cc579d1a474fb2b94487f420fd
     test/examples/lotr.git/objects/ec/da3205bee14520aab5a7bb307392064b938e83
-    test/examples/lotr.git/objects/ed/d74f8d7f6d025d66eb67411c5db60959ae16fd
     test/examples/lotr.git/objects/fa/e7ef5344202bba4129abdc13060d9297d99465
     test/examples/lotr.git/objects/info/packs
     test/examples/lotr.git/objects/pack/pack-dcbeaf3f6ff6c5eb08ea2b0a2d83626e8763546b.idx
