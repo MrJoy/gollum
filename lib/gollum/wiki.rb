@@ -558,6 +558,6 @@ module Gollum
     def sync_working_tree
       @repo.git.run("cd #{@path};", 'reset', '', {}, ['--hard'])
       @repo.git.run("cd #{@path};", 'clean', '', {}, ['-df'])
+    end
   end
-end
 end
