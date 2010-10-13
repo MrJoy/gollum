@@ -126,8 +126,7 @@ module Gollum
     # Public: The format of the page.
     #
     # Returns the Symbol format of the page. One of:
-    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod |
-    #     :roff ]
+    #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod ]
     def format
       case @blob.name
         when /\.(md|mkdn?|mdown|markdown)$/i
@@ -146,8 +145,6 @@ module Gollum
           :asciidoc
         when /\.(pod)$/i
           :pod
-        when /\.(\d)$/i
-          :roff
         else
           nil
       end
