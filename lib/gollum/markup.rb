@@ -382,9 +382,9 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_extension_tag(tag)
-      tag = tag.split
-      command = tag.first
-      arguments = tag[1..-1].join
+      tag = tag.split(/\s+/, 2)
+      command = tag.shift
+      arguments = tag.shift
       Gollum::ExtensionTag.extensions[command].new(@wiki, arguments).render
     end
     
