@@ -327,7 +327,7 @@ following syntax:
       bob->alice: Test response
     }}
 
-You can replace the string "blue-modern" with any supported style.
+You can replace the string "omegapple" with any supported style.
 
 ## API DOCUMENTATION
 
