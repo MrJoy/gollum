@@ -401,7 +401,7 @@ module Gollum
       tag = tag.split
       command = tag.first
       arguments = tag[1..-1].join
-      Gollum::ExtensionTag.extensions[command].new(@wiki, tag.join, arguments).render
+      Gollum::ExtensionTag.extensions[command].new(@wiki, arguments).render
     end
     
     #########################################################################
