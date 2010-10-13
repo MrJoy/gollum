@@ -18,7 +18,6 @@ module Gollum
       @extensiontagmap  = {}
       @codemap = {}
       @texmap  = {}
-      @wsdmap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -34,7 +33,6 @@ module Gollum
         SANITIZATION_OPTIONS
       data = extract_tex(@data)
       data = extract_code(data)
-      data = extract_wsd(data)
       data = extract_tags(data)
       data = extract_extension_tags(data)
       begin
@@ -47,7 +45,6 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = process_wsd(data)
       data = Sanitize.clean(data, sanitize_options)
       data = process_extension_tags(data)
       data = process_tex(data)
@@ -445,26 +442,6 @@ module Gollum
     def check_cache(type, id)
     end
 
-    #########################################################################
-    #
-    # Sequence Diagrams
-    #
-    #########################################################################
-
-    # Extract all sequence diagram blocks into the wsdmap and replace with 
-    # placeholders.
-    #
-    # data - The raw String data.
-    #
-    # Returns the placeholder'd String data.
-    def extract_wsd(data)
-      data.gsub(/^\{\{\{ ?(.+?)\r?\n(.+?)\r?\n\}\}\}\r?$/m) do
-        id = Digest::SHA1.hexdigest($2)
-        @wsdmap[id] = { :style => $1, :code => $2 }
-        id
-      end
-    end
-
     # Hook for caching the formatted value of extracted tag data.
     #
     # type - Symbol value identifying what type of data is being extracted.
@@ -473,21 +450,6 @@ module Gollum
     #
     # Returns nothing.
     def update_cache(type, id, data)
-    end
-
-    # Process all diagrams from the wsdmap and replace the placeholders with 
-    # the final HTML.
-    #
-    # data - The String data (with placeholders).
-    #
-    # Returns the marked up String data.
-    def process_wsd(data)
-      @wsdmap.each do |id, spec|
-        style = spec[:style]
-        code = spec[:code]
-        data.gsub!(id, Gollum::WebSequenceDiagram.new(code, style).to_tag)
-      end
-      data
     end
   end
 end

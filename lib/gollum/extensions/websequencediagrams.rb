@@ -41,3 +41,16 @@ class Gollum::WebSequenceDiagram
     @tag
   end
 end
+
+module Gollum
+  class WebSequenceDiagrams < Gollum::ExtensionTag
+    def render
+      args = @arguments.split(/\n/, 2)
+      style = args[0]
+      code = args[1]
+      Gollum::WebSequenceDiagram.new(code, style).to_tag
+    end
+  end
+end
+
+Gollum::ExtensionTag.register_extension_tag('wsd', Gollum::WebSequenceDiagrams)

@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
     lib/gollum.rb
     lib/gollum/albino.rb
     lib/gollum/blob_entry.rb
+    lib/gollum/extensions/websequencediagrams.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
     lib/gollum/frontend/public/css/editbar.css

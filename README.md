@@ -322,10 +322,10 @@ You may imbed sequence diagrams into your wiki page (rendered by
 [WebSequenceDiagrams](http://www.websequencediagrams.com) by using the 
 following syntax:
 
-    {{{ blue-modern
+    {{wsd omegapple
       alice->bob: Test
       bob->alice: Test response
-    }}}
+    }}
 
 You can replace the string "blue-modern" with any supported style.
 

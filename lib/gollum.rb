@@ -31,7 +31,6 @@ require 'gollum/page'
 require 'gollum/file'
 require 'gollum/markup'
 require 'gollum/albino'
-require 'gollum/websequencediagram'
 
 require 'gollum/extension.rb'
 require_all 'gollum/extensions'
