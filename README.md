@@ -329,6 +329,19 @@ following syntax:
 
 You can replace the string "omegapple" with any supported style.
 
+As of this writing, valid styles are:
+
+* default (Plain UML)
+* rose
+* qsd
+* napkin
+* mscgen
+* omegapple
+* modern-blue (Blue Modern)
+* earth (Green Earth)
+* roundgreen
+
+
 ## API DOCUMENTATION
 
 The Gollum API allows you to retrieve raw or formatted wiki content from a Git
