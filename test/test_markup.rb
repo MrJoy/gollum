@@ -99,7 +99,7 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_match /class="internal present"/,        output
+      assert_match /class="internal present"/,     output
       assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
       assert_match /\>Bilbo Baggins \d\</,            output
     end
@@ -164,7 +164,7 @@ context "Markup" do
     @wiki.write_page("Bilbo Baggins", :markdown, "a [[/alpha.jpg]] [[a | /alpha.jpg]] b", commit_details)
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path on root" do
@@ -175,7 +175,7 @@ context "Markup" do
     index.commit("Add alpha.jpg")
 
     page = @wiki.page("Bilbo Baggins")
-    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /> <a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
+    assert_equal %{<p>a <img src="/wiki/alpha.jpg" /><a href="/wiki/alpha.jpg">a</a> b</p>}, page.formatted_data
   end
 
   test "image with relative path" do
@@ -187,7 +187,7 @@ context "Markup" do
 
     page = @wiki.page("Bilbo Baggins")
     output = page.formatted_data
-    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /> <a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
+    assert_equal %{<p>a <img src="/wiki/greek/alpha.jpg" /><a href="/wiki/greek/alpha.jpg">a</a> b</p>}, output
   end
 
   test "image with alt" do
@@ -260,6 +260,41 @@ context "Markup" do
     content = "a\n\n[[alpha.jpg|frame|alt=Alpha]]\n\nb"
     output = "<p>a</p>\n\n<p><span class=\"frame\"><span><img src=\"/greek/alpha.jpg\" alt=\"Alpha\" /><span>Alpha</span></span></span></p>\n\n<p>b</p>"
     relative_image(content, output)
+  end
+
+  test "normal gist" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234]]", commit_details)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist with file" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234?file=some.ext]]", commit_details)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js?file=some.ext" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist with extension" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[http://gist.github.com/1234.js]]", commit_details)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "gist without http" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "[[gist.github.com/1234]]", commit_details)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"><\script></p>', page.formatted_data
+  end
+
+  test "non-gist link" do
+    @wiki.write_page("Bilbo Baggins", :markdown, "a [[http://gist.github.com/]] b", commit_details)
+
+    page = @wiki.page("Bilbo Baggins")
+    assert_equal "<p>a <a href=\"http://gist.github.com/\">http://gist.github.com/</a> b</p>", page.formatted_data
   end
 
   #########################################################################
