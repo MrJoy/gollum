@@ -264,26 +264,6 @@ context "Markup" do
 
   #########################################################################
   #
-  # Gist
-  #
-  #########################################################################
-
-  test "normal gist" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "{{gist 1234}}", commit_details)
-
-    page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js" type="text/javascript"></script></p>', page.formatted_data
-  end
-
-  test "gist with file" do
-    @wiki.write_page("Bilbo Baggins", :markdown, "{{gist 1234|some.ext}}", commit_details)
-
-    page = @wiki.page("Bilbo Baggins")
-    assert_equal '<p><script src="http://gist.github.com/1234.js?file=some.ext" type="text/javascript"></script></p>', page.formatted_data
-  end
-
-  #########################################################################
-  #
   # File links
   #
   #########################################################################
