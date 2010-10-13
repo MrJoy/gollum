@@ -2,7 +2,11 @@
   <div class="main">
     <div class="actions">
       <form action="/search" method="get">
-        <a href="/">Home</a> | <a href="/edit/{{escaped_name}}">Edit</a> | <input type="search" name="q" size="10" /> <input type="submit" value="search" />
+        <div>
+          <a href="/">Home</a> | 
+          <a href="/edit/{{escaped_name}}">Edit</a> | 
+          <input type="search" name="q" size="10" /> <input type="submit" value="search" />
+        </div>
       </form>
     </div>
     <h1>{{title}}</h1>

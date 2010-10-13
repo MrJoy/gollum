@@ -99,7 +99,7 @@ context "Markup" do
 
       page = @wiki.page(name)
       output = page.formatted_data
-      assert_match /class="internal present"/,     output
+      assert_match /class="internal present"/,        output
       assert_match /href="\/wiki\/Bilbo-Baggins-\d"/, output
       assert_match /\>Bilbo Baggins \d\</,            output
     end
