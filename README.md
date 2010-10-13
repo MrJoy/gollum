@@ -170,19 +170,11 @@ underlying markup format.
 
 Links to Gists are converted to embedded gists.
 
-    [[gist://177172]]
+    {{gist 177172}}
 
 The link can also be to a specific file in the gist.
 
-    [[gist://177172/pythonway.py]]
-
-Additionally, links to gist.github.com are recognized and handled as well:
-
-    [[http://gist.github.com/177172]]
-    [[http://gist.github.com/177172?file=pythonway.py]]
-
-Gist links do not have to start with http:// or https://, neither do they
-have to end  with .js
+    {{gist 177172|pythonway.py}}
 
 ## ABSOLUTE VS. RELATIVE VS. EXTERNAL PATH
 
