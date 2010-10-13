@@ -41,7 +41,7 @@ module Gollum
     end
 
     # Reusable filter to turn a filename (without path) into a canonical name.
-    # Strips extension, converts spaces to dashes.
+    # Strips extension, converts dashes to spaces.
     #
     # Returns the filtered String.
     def self.canonicalize_filename(filename)
