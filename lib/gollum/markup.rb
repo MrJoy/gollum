@@ -337,7 +337,7 @@ module Gollum
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
     end
-    
+
     #########################################################################
     #
     # Extension tags
@@ -401,7 +401,7 @@ module Gollum
     # Returns the placeholder'd String data.
     def extract_code(data)
       data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
-        id = Digest::SHA1.hexdigest($2)
+        id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
           { :output => cached } : 
@@ -419,11 +419,11 @@ module Gollum
     def process_code(data)
       @codemap.each do |id, spec|
         formatted = spec[:output] || begin
-        lang = spec[:lang]
-        code = spec[:code]
-        if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
-          code.gsub!(/^(  |\t)/m, '')
-        end
+          lang = spec[:lang]
+          code = spec[:code]
+          if code.lines.all? { |line| line =~ /\A\r?\n\Z/ || line =~ /^(  |\t)/ }
+            code.gsub!(/^(  |\t)/m, '')
+          end
           formatted = Gollum::Albino.new(code, lang).colorize
           update_cache(:code, id, formatted)
           formatted
