@@ -141,7 +141,7 @@ module Gollum
     #             <a> tags.
     #
     # Returns the String HTML version of the tag.
-    def process_tag(tag, no_follow)
+    def process_tag(tag, no_follow = false)
       if html = process_pages_tag(tag)
 	return html
       elsif html = process_image_tag(tag)
