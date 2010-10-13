@@ -124,7 +124,7 @@ module Gollum
     # Process all tags from the tagmap and replace the placeholders with the
     # final markup.
     #
-    # data - The String data (with placeholders).
+    # data      - The String data (with placeholders).
     # no_follow - Boolean that determines if rel="nofollow" is added to all
     #             <a> tags.
     #
@@ -145,59 +145,14 @@ module Gollum
     #
     # Returns the String HTML version of the tag.
     def process_tag(tag, no_follow = false)
-      if html = process_pages_tag(tag)
-        return html
-      elsif html = process_image_tag(tag)
-        return html
+      if html = process_image_tag(tag)
+        html
       elsif html = process_gist_link_tag(tag)
-        return html
+        html
       elsif html = process_file_link_tag(tag, no_follow)
-        return html
+        html
       else
         process_page_link_tag(tag, no_follow)
-      end
-    end
-
-    # Extract all dynamic tags into the tagmap and replace with placeholders.
-    #
-    # data - The raw String data.
-    #
-    # Returns the placeholder'd String data.
-    def extract_dynamic_tags(data)
-      data.gsub(/(.?)\{\{(.+?)\}\}([^\[]?)/m) do
-        if $1 == "'" && $3 != "'"
-          "\{\{#{$2}\}\}#{$3}"
-        elsif $2.include?('}{[')
-          $&
-        else
-          id = Digest::SHA1.hexdigest($2)
-          @dynamictagmap[id] = $2
-          "#{$1}#{id}#{$3}"
-        end
-      end
-    end
-
-    # Process all dynamic tags from the tagmap and replace the placeholders
-    # with the final markup.
-    #
-    # data - The String data (with placeholders).
-    #
-    # Returns the marked up String data.
-    def process_dynamic_tags(data)
-      @dynamictagmap.each do |id, tag|
-        data.gsub!(id, process_dynamic_tag(tag))
-      end
-      data
-    end
-
-    # Process a single dynamic tag into its final HTML form.
-    #
-    # tag - The String tag contents (the stuff inside the double brackets).
-    #
-    # Returns the String HTML version of the tag.
-    def process_dynamic_tag(tag)
-      if html = process_dynamic_pages_tag(tag)
-        return html
       end
     end
 
@@ -357,7 +312,7 @@ module Gollum
         page, extra = find_page_from_name(cname)
         if page
           link_name = Page.cname(page.name)
-          presence = "present"
+          presence  = "present"
         end
         link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
@@ -382,22 +337,6 @@ module Gollum
       end
     end
 
-    # Attempt to process the tag as a pages list tag.
-    #
-    # tag - The String tag contents (the stuff inside the double brackets).
-    #
-    # Returns the String HTML of Pages as an unordered list, with page links.
-    def process_dynamic_pages_tag(tag)
-      if tag == 'pages'
-	pages = @wiki.pages
-	pages_li_html = ''
-	if pages.size > 0:
-	  pages_li_html = pages.map { |p| %{<li>#{process_page_link_tag(p.name)}</li>} }
-        end
-        %{<ul id="pages">#{pages_li_html}</ul>}
-      end
-    end
-
     # Find a page from a given cname.  If the page has an anchor (#) and has
     # no match, strip the anchor and try again.
     #
@@ -414,7 +353,67 @@ module Gollum
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
     end
+    
+    #########################################################################
+    #
+    # Dynamic tags
+    #
+    #########################################################################
 
+    # Extract all dynamic tags into the tagmap and replace with placeholders.
+    #
+    # data - The raw String data.
+    #
+    # Returns the placeholder'd String data.
+    def extract_dynamic_tags(data)
+      data.gsub(/(.?)\{\{(.+?)\}\}([^\[]?)/m) do
+        if $1 == "'" && $3 != "'"
+          "\{\{#{$2}\}\}#{$3}"
+        elsif $2.include?('}{[')
+          $&
+        else
+          id = Digest::SHA1.hexdigest($2)
+          @dynamictagmap[id] = $2
+          "#{$1}#{id}#{$3}"
+        end
+      end
+    end
+
+    # Process all dynamic tags from the tagmap and replace the placeholders
+    # with the final markup.
+    #
+    # data - The String data (with placeholders).
+    #
+    # Returns the marked up String data.
+    def process_dynamic_tags(data)
+      @dynamictagmap.each do |id, tag|
+        data.gsub!(id, process_dynamic_tag(tag))
+      end
+      data
+    end
+
+    # Process a single dynamic tag into its final HTML form.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String HTML version of the tag.
+    def process_dynamic_tag(tag)
+      if html = process_dynamic_pages_tag(tag)
+        return html
+      end
+    end
+
+    # Attempt to process the tag as a pages list tag.
+    #
+    # tag - The String tag contents (the stuff inside the double brackets).
+    #
+    # Returns the String HTML of Pages as an unordered list, with page links.
+    def process_dynamic_pages_tag(tag)
+      if tag == 'pages'
+        Gollum::PageList.new(@wiki).render
+      end
+    end
+    
     #########################################################################
     #
     # Code
