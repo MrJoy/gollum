@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
     lib/gollum/albino.rb
     lib/gollum/blob_entry.rb
     lib/gollum/extension.rb
+    lib/gollum/extensions/gist.rb
     lib/gollum/extensions/pagelist.rb
     lib/gollum/extensions/websequencediagrams.rb
     lib/gollum/file.rb
