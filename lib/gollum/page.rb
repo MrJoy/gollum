@@ -5,6 +5,14 @@ module Gollum
     Wiki.page_class = self
 
     VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod)$/i
+    FORMAT_EXTENSIONS = { :markdown => "md",
+                          :textile  => "textile",
+                          :rdoc     => "rdoc",
+                          :org      => "org",
+                          :creole   => "creole",
+                          :rest     => "rest",
+                          :asciidoc => "asciidoc",
+                          :pod      => "pod" }
     FORMAT_NAMES = { :markdown => "Markdown",
                      :textile  => "Textile",
                      :rdoc     => "RDoc",
@@ -13,6 +21,15 @@ module Gollum
                      :rest     => "reStructuredText",
                      :asciidoc => "AsciiDoc",
                      :pod      => "Pod" }
+    EXTENSION_FORMATS = Hash.new.tap do |mappings|
+      # Simple cases where the ext and desired symbol are the same.
+      %w(textile rdoc org creole asciidoc pod).each { |ext| mappings[".#{ext}"] = ext.to_sym }
+
+      # More complex cases with multiple mappings, etc.
+      %w(md mkd mkdn mdown markdown).each { |ext| mappings[".#{ext}"] = :markdown }
+      %w(rst rest rst.txt rest.txt).each { |ext| mappings[".#{ext}"] = :rest }
+    end
+
 
     # Sets a Boolean determing whether this page is a historical version.
     #
@@ -128,26 +145,10 @@ module Gollum
     # Returns the Symbol format of the page. One of:
     #   [ :markdown | :textile | :rdoc | :org | :rest | :asciidoc | :pod ]
     def format
-      case @blob.name
-        when /\.(md|mkdn?|mdown|markdown)$/i
-          :markdown
-        when /\.(textile)$/i
-          :textile
-        when /\.(rdoc)$/i
-          :rdoc
-        when /\.(org)$/i
-          :org
-        when /\.(creole)$/i
-          :creole
-        when /\.(re?st(\.txt)?)$/i
-          :rest
-        when /\.(asciidoc)$/i
-          :asciidoc
-        when /\.(pod)$/i
-          :pod
-        else
-          nil
-      end
+      path = @blob.name
+      ext = ::File.extname(path)
+      ext = ::File.extname(path[0, path.length - ext.length]) + ext if(ext == ".txt")
+      EXTENSION_FORMATS[ext]
     end
 
     # Public: The current version of the page.
@@ -232,16 +233,7 @@ module Gollum
     #
     # Returns the String extension (no leading period).
     def self.format_to_ext(format)
-      case format
-        when :markdown then 'md'
-        when :textile  then 'textile'
-        when :rdoc     then 'rdoc'
-        when :org      then 'org'
-        when :creole   then 'creole'
-        when :rest     then 'rest'
-        when :asciidoc then 'asciidoc'
-        when :pod      then 'pod'
-      end
+      FORMAT_EXTENSIONS[format]
     end
 
     #########################################################################
