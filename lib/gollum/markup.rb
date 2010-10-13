@@ -147,8 +147,6 @@ module Gollum
     def process_tag(tag, no_follow = false)
       if html = process_image_tag(tag)
         html
-      elsif html = process_gist_link_tag(tag)
-        html
       elsif html = process_file_link_tag(tag, no_follow)
         html
       else
@@ -241,20 +239,6 @@ module Gollum
         memo[parts[0]] = (parts.size == 1 ? true : parts[1])
         memo
       end
-    end
-
-    # Attempt to process the tag as a gist link tag.
-    #
-    # tag - The String tag contents (the stuff inside the double brackets).
-    #
-    # Returns the String HTML if the tag is a valid gist link tag or nil
-    #   if it is not.
-    def process_gist_link_tag(tag)
-      tmp = tag.sub!(/^(?:gist:\/\/)(\d+)(?:\/(.*))?$/, '<script src="http://gist.github.com/\1.js?file=\2" type="text/javascript"></script>')
-      if(tmp.nil?)
-        tmp = tag.sub!(/^(?:https?:\/\/)?(gist\.github\.com\/\d+)(?:\.js)?((?:\?file=\w+(?:\.\w+)*)?)$/, '<script src="http://\1.js\2" type="text/javascript"></script>')
-      end
-      return tmp
     end
 
     # Attempt to process the tag as a file link tag.
