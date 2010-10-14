@@ -4,7 +4,6 @@ module Gollum
 
     Wiki.page_class = self
 
-    VALID_PAGE_RE = /^(.+)\.(md|mkdn?|mdown|markdown|textile|rdoc|org|creole|re?st(\.txt)?|asciidoc|pod)$/i
     FORMAT_EXTENSIONS = { :markdown => "md",
                           :textile  => "textile",
                           :rdoc     => "rdoc",
@@ -29,6 +28,7 @@ module Gollum
       %w(md mkd mkdn mdown markdown).each { |ext| mappings[".#{ext}"] = :markdown }
       %w(rst rest rst.txt rest.txt).each { |ext| mappings[".#{ext}"] = :rest }
     end
+    VALID_PAGE_RE = Regexp.new('^(.+)(' + EXTENSION_FORMATS.keys.map { |e| Regexp.quote(e) }.join('|') + ')$', Regexp::IGNORECASE)
 
 
     # Sets a Boolean determing whether this page is a historical version.
