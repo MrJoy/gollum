@@ -166,15 +166,6 @@ External links must begin with either "http://" or "https://". If you need
 something more flexible, you can resort to the link syntax in the page's
 underlying markup format.
 
-## Gist embedding
-
-Links to Gists are converted to embedded gists.
-
-    {{gist 177172}}
-
-The link can also be to a specific file in the gist.
-
-    {{gist 177172|pythonway.py}}
 
 ## ABSOLUTE VS. RELATIVE VS. EXTERNAL PATH
 
@@ -314,32 +305,6 @@ inline with regular text. For example:
 
 Gollum uses [MathJax](http://www.mathjax.org/) to convert the TeX syntax into
 output suitable for display in web browsers.
-
-
-## SEQUENCE DIAGRAMS
-
-You may imbed sequence diagrams into your wiki page (rendered by
-[WebSequenceDiagrams](http://www.websequencediagrams.com) by using the 
-following syntax:
-
-    {{wsd omegapple
-      alice->bob: Test
-      bob->alice: Test response
-    }}
-
-You can replace the string "omegapple" with any supported style.
-
-As of this writing, valid styles are:
-
-* default (Plain UML)
-* rose
-* qsd
-* napkin
-* mscgen
-* omegapple
-* modern-blue (Blue Modern)
-* earth (Green Earth)
-* roundgreen
 
 
 ## API DOCUMENTATION

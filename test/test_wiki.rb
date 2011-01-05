@@ -3,8 +3,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Wiki" do
   setup do
-    @access = Gollum::GitAccess.new(testpath("examples/lotr.git"))
-    @wiki   = Gollum::Wiki.new(@access)
+    @wiki = Gollum::Wiki.new(testpath("examples/lotr.git"))
   end
 
   test "repo path" do

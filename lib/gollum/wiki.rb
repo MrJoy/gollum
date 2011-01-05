@@ -212,17 +212,17 @@ module Gollum
     def update_page(page, name, format, data, commit = {})
       name   ||= page.name
       format ||= page.format
-      dir = ::File.dirname(page.path)
-      dir = '' if dir == '.'
+      dir      = ::File.dirname(page.path)
+      dir      = '' if dir == '.'
       index    = nil
       sha1     = commit_index(commit) do |idx|
         index = idx
-      if page.name == name && page.format == format
-        index.add(page.path, normalize(data))
-      else
-        index.delete(page.path)
-        add_to_index(index, dir, name, format, data, :allow_same_ext)
-      end
+        if page.name == name && page.format == format
+          index.add(page.path, normalize(data))
+        else
+          index.delete(page.path)
+          add_to_index(index, dir, name, format, data, :allow_same_ext)
+        end
       end
 
       @access.refresh
@@ -245,7 +245,7 @@ module Gollum
       index = nil
       sha1  = commit_index(commit) do |idx|
         index = idx
-      index.delete(page.path)
+        index.delete(page.path)
       end
 
       dir = ::File.dirname(page.path)
@@ -264,17 +264,6 @@ module Gollum
     # Returns an Array of Gollum::Page instances.
     def pages(treeish = nil)
       tree_list(treeish || 'master')
-    end
-
-    # Public: Lists all pages for this wiki sorted by title.
-    #
-    # treeish - The String commit ID or ref to find  (default: master)
-    #
-    # Returns an Array of Gollum::Page instances.
-    def pages_sorted_by_title(treeish = nil)
-      tree_list(treeish || 'master').sort! do |x, y| 
-        x.title.downcase <=> y.title.downcase
-      end
     end
 
     # Public: Returns the number of pages accessible from a commit 
@@ -343,13 +332,6 @@ module Gollum
       sha1
     end
 
-    # Public: Creates and caches a PageBuilder instance for this Wiki.
-    #
-    # Returns a PageBuilder instance.
-    def builder
-      @builder ||= PageBuilder.new(self)
-    end
-
     # Public: Refreshes just the cached Git reference data.  This should
     # be called after every Gollum update.
     #
@@ -378,10 +360,6 @@ module Gollum
       end
     end
 
-    def inspect
-      %(#<#{self.class} @repo=#{@repo.inspect}>)
-    end
-
     #########################################################################
     #
     # Internal Methods
@@ -399,13 +377,13 @@ module Gollum
     attr_reader :path
 
     # Gets the page class used by all instances of this Wiki.
-    attr_accessor :page_class
+    attr_reader :page_class
 
     # Gets the file class used by all instances of this Wiki.
-    attr_accessor :file_class
+    attr_reader :file_class
 
-    # Gets or Sets the markup class used by all instances of this Wiki.
-    attr_accessor :markup_class
+    # Gets the markup class used by all instances of this Wiki.
+    attr_reader :markup_class
 
     # Normalize the data.
     #

@@ -15,7 +15,6 @@ module Gollum
       @version = page.version.id
       @dir     = ::File.dirname(page.path)
       @tagmap  = {}
-      @extensiontagmap  = {}
       @codemap = {}
       @texmap  = {}
       @premap  = {}
@@ -36,7 +35,6 @@ module Gollum
       data = extract_tex(@data.dup)
       data = extract_code(data)
       data = extract_tags(data)
-      data = extract_extension_tags(data)
       begin
         data = GitHub::Markup.render(@name, data)
         if data.nil?
@@ -53,7 +51,6 @@ module Gollum
         yield doc if block_given?
         data = doc_to_html(doc)
       end
-      data = process_extension_tags(data)
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
@@ -310,23 +307,13 @@ module Gollum
           link_name = @wiki.page_class.cname(page.name)
           presence  = "present"
         end
-        link_name = CGI.escape(link_name)
-        link = build_page_link(link_name)
+        link = ::File.join(@wiki.base_path, CGI.escape(link_name))
         %{<a class="internal #{presence}" href="#{link}#{extra}">#{name}</a>}
       end
       if tag && no_follow
         tag.sub! /^<a/, '<a ref="nofollow"'
       end
       tag
-    end
-
-    # Generate a page link for an anchor tag.
-    #
-    # link_name - CGI-escaped String name of the link.
-    #
-    # Returns a String link.
-    def build_page_link(link_name)
-      ::File.join(@wiki.base_path, link_name)
     end
 
     # Find the given file in the repo.
@@ -358,56 +345,6 @@ module Gollum
       if pos = cname.index('#')
         [@wiki.page(cname[0...pos]), cname[pos..-1]]
       end
-    end
-
-    #########################################################################
-    #
-    # Extension tags
-    #
-    #########################################################################
-
-    # Extract all extension tags into the tagmap and replace with placeholders.
-    #
-    # data - The raw String data.
-    #
-    # Returns the placeholder'd String data.
-    def extract_extension_tags(data)
-      data.gsub(/(.?)\{\{(.+?)\}\}([^\[]?)/m) do
-        if $1 == "'" && $3 != "'"
-          "\{\{#{$2}\}\}#{$3}"
-        elsif $2.include?('}{[')
-          $&
-        else
-          id = Digest::SHA1.hexdigest($2)
-          @extensiontagmap[id] = $2
-          "#{$1}#{id}#{$3}"
-        end
-      end
-    end
-
-    # Process all extension tags from the tagmap and replace the placeholders
-    # with the final markup.
-    #
-    # data - The String data (with placeholders).
-    #
-    # Returns the marked up String data.
-    def process_extension_tags(data)
-      @extensiontagmap.each do |id, tag|
-        data.gsub!(id, process_extension_tag(tag))
-      end
-      data
-    end
-
-    # Process a single extension tag into its final HTML form.
-    #
-    # tag - The String tag contents (the stuff inside the double brackets).
-    #
-    # Returns the String HTML version of the tag.
-    def process_extension_tag(tag)
-      tag = tag.split(/\s+/, 2)
-      command = tag.shift
-      arguments = tag.shift
-      Gollum::ExtensionTag.extensions[command].new(@wiki, arguments).render
     end
 
     #########################################################################
