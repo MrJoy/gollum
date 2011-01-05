@@ -4,24 +4,24 @@ module Gollum
 
     Wiki.page_class = self
 
-    FORMAT_EXTENSIONS = { :markdown  => "md",
-                          :textile   => "textile",
-                          :rdoc      => "rdoc",
-                          :org       => "org",
-                          :creole    => "creole",
-                          :rest      => "rest",
-                          :asciidoc  => "asciidoc",
+    FORMAT_EXTENSIONS = { :markdown => "md",
+                          :textile  => "textile",
+                          :rdoc     => "rdoc",
+                          :org      => "org",
+                          :creole   => "creole",
+                          :rest     => "rest",
+                          :asciidoc => "asciidoc",
                           :pod       => "pod",
                           :mediawiki => "mediawiki" }
-    FORMAT_NAMES = { :markdown  => "Markdown",
-                     :textile   => "Textile",
-                     :rdoc      => "RDoc",
-                     :org       => "Org-mode",
-                     :creole    => "Creole",
-                     :rest      => "reStructuredText",
-                     :asciidoc  => "AsciiDoc",
+    FORMAT_NAMES = { :markdown => "Markdown",
+                     :textile  => "Textile",
+                     :rdoc     => "RDoc",
+                     :org      => "Org-mode",
+                     :creole   => "Creole",
+                     :rest     => "reStructuredText",
+                     :asciidoc => "AsciiDoc",
                      :mediawiki => "MediaWiki",
-                     :pod       => "Pod" }
+                     :pod      => "Pod" }
     EXTENSION_FORMATS = Hash.new.tap do |mappings|
       # Simple cases where the ext and desired symbol are the same.
       %w(textile rdoc org creole asciidoc pod).each { |ext| mappings[".#{ext}"] = ext.to_sym }
@@ -85,7 +85,7 @@ module Gollum
       @blob && @blob.name
     end
 
-    # Public: The canonical page name without extension, and dashes converted
+    # Public: The canonical page name without extension, and dashes converted 
     # to spaces.
     #
     # Returns the String name.
@@ -178,7 +178,7 @@ module Gollum
     # options - The options Hash:
     #           :page     - The Integer page number (default: 1).
     #           :per_page - The Integer max count of items to return.
-    #           :follow   - Follow's a file across renames, but falls back
+    #           :follow   - Follow's a file across renames, but falls back 
     #                       to a slower Grit native call.  (default: false)
     #
     # Returns an Array of Grit::Commit.
@@ -208,7 +208,7 @@ module Gollum
       @sidebar ||= find_sub_page(:sidebar)
     end
 
-    # Gets a Boolean determining whether this page is a historical version.
+    # Gets a Boolean determining whether this page is a historical version.  
     # Historical pages are pulled using exact SHA hashes and format all links
     # with rel="nofollow"
     #
@@ -273,7 +273,7 @@ module Gollum
     def find(name, version)
       map = @wiki.tree_map_for(version.to_s)
       if page = find_page_in_tree(map, name)
-        page.version    = version.is_a?(Grit::Commit) ?
+        page.version    = version.is_a?(Grit::Commit) ? 
           version : @wiki.commit_for(version)
         page.historical = page.version.to_s == version.to_s
         page
@@ -286,7 +286,7 @@ module Gollum
     # map         - The Array tree map from Wiki#tree_map.
     # name        - The canonical String page name.
     # checked_dir - Optional String of the directory a matching page needs
-    #               to be in.  The string should
+    #               to be in.  The string should 
     #
     # Returns a Gollum::Page or nil if the page could not be found.
     def find_page_in_tree(map, name, checked_dir = nil)
