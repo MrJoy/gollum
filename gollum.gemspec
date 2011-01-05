@@ -508,6 +508,29 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/objects/pack/pack-dcbeaf3f6ff6c5eb08ea2b0a2d83626e8763546b.pack
     test/examples/lotr.git/packed-refs
     test/examples/lotr.git/refs/heads/master
+    test/examples/yubiwa.git/HEAD
+    test/examples/yubiwa.git/config
+    test/examples/yubiwa.git/description
+    test/examples/yubiwa.git/hooks/applypatch-msg.sample
+    test/examples/yubiwa.git/hooks/commit-msg.sample
+    test/examples/yubiwa.git/hooks/post-commit.sample
+    test/examples/yubiwa.git/hooks/post-receive.sample
+    test/examples/yubiwa.git/hooks/post-update.sample
+    test/examples/yubiwa.git/hooks/pre-applypatch.sample
+    test/examples/yubiwa.git/hooks/pre-commit.sample
+    test/examples/yubiwa.git/hooks/pre-rebase.sample
+    test/examples/yubiwa.git/hooks/prepare-commit-msg.sample
+    test/examples/yubiwa.git/hooks/update.sample
+    test/examples/yubiwa.git/info/exclude
+    test/examples/yubiwa.git/objects/10/fa2ddc4e3b4009d8a453aace10bd6148c1ad00
+    test/examples/yubiwa.git/objects/52/4b82874327ea7cbf730389964ba7cb3de966de
+    test/examples/yubiwa.git/objects/58/3fc201cb457fb3f1480f3e1e5999b119633835
+    test/examples/yubiwa.git/objects/87/bc1dd46ab3d3874d4e898d45dd512cc20a7cc8
+    test/examples/yubiwa.git/objects/89/64ed1b4e21aa90e831763bbce9034bfda81b70
+    test/examples/yubiwa.git/objects/9f/f6dd0660da5fba2d3374adb2b84fa653bb538b
+    test/examples/yubiwa.git/objects/ac/e97abf2b177815a1972d7db22f229f58c83309
+    test/examples/yubiwa.git/objects/b1/f443863a4816628807fbf86141ebef055dda34
+    test/examples/yubiwa.git/refs/heads/master
     test/helper.rb
     test/test_extensions_gist.rb
     test/test_file.rb
