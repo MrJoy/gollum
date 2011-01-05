@@ -266,6 +266,17 @@ module Gollum
       tree_list(treeish || 'master')
     end
 
+    # Public: Lists all pages for this wiki sorted by title.
+    #
+    # treeish - The String commit ID or ref to find  (default: master)
+    #
+    # Returns an Array of Gollum::Page instances.
+    def pages_sorted_by_title(treeish = nil)
+      tree_list(treeish || 'master').sort! do |x, y| 
+        x.title.downcase <=> y.title.downcase
+      end
+    end
+
     # Public: Returns the number of pages accessible from a commit 
     #
     # ref - A String ref that is either a commit SHA or references one.
@@ -332,6 +343,13 @@ module Gollum
       sha1
     end
 
+    # Public: Creates and caches a PageBuilder instance for this Wiki.
+    #
+    # Returns a PageBuilder instance.
+    def builder
+      @builder ||= PageBuilder.new(self)
+    end
+
     # Public: Refreshes just the cached Git reference data.  This should
     # be called after every Gollum update.
     #
@@ -360,6 +378,10 @@ module Gollum
       end
     end
 
+    def inspect
+      %(#<#{self.class} @repo=#{@repo.inspect}>)
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -377,13 +399,13 @@ module Gollum
     attr_reader :path
 
     # Gets the page class used by all instances of this Wiki.
-    attr_reader :page_class
+    attr_accessor :page_class
 
     # Gets the file class used by all instances of this Wiki.
-    attr_reader :file_class
+    attr_accessor :file_class
 
-    # Gets the markup class used by all instances of this Wiki.
-    attr_reader :markup_class
+    # Gets or Sets the markup class used by all instances of this Wiki.
+    attr_accessor :markup_class
 
     # Normalize the data.
     #
