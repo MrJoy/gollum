@@ -4,14 +4,15 @@ module Gollum
 
     Wiki.page_class = self
 
-    FORMAT_EXTENSIONS = { :markdown => "md",
-                          :textile  => "textile",
-                          :rdoc     => "rdoc",
-                          :org      => "org",
-                          :creole   => "creole",
-                          :rest     => "rest",
-                          :asciidoc => "asciidoc",
-                          :pod      => "pod" }
+    FORMAT_EXTENSIONS = { :markdown  => "md",
+                          :textile   => "textile",
+                          :rdoc      => "rdoc",
+                          :org       => "org",
+                          :creole    => "creole",
+                          :rest      => "rest",
+                          :asciidoc  => "asciidoc",
+                          :pod       => "pod",
+                          :mediawiki => "mediawiki" }
     FORMAT_NAMES = { :markdown  => "Markdown",
                      :textile   => "Textile",
                      :rdoc      => "RDoc",
@@ -26,6 +27,7 @@ module Gollum
       %w(textile rdoc org creole asciidoc pod).each { |ext| mappings[".#{ext}"] = ext.to_sym }
 
       # More complex cases with multiple mappings, etc.
+      %w(mediawiki wiki).each { |ext| mappings[".#{ext}"] = :mediawiki }
       %w(md mkd mkdn mdown markdown).each { |ext| mappings[".#{ext}"] = :markdown }
       %w(rst rest rst.txt rest.txt).each { |ext| mappings[".#{ext}"] = :rest }
     end
