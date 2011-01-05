@@ -343,6 +343,13 @@ module Gollum
       sha1
     end
 
+    # Public: Creates and caches a PageBuilder instance for this Wiki.
+    #
+    # Returns a PageBuilder instance.
+    def builder
+      @builder ||= PageBuilder.new(self)
+    end
+
     # Public: Refreshes just the cached Git reference data.  This should
     # be called after every Gollum update.
     #
@@ -371,6 +378,10 @@ module Gollum
       end
     end
 
+    def inspect
+      %(#<#{self.class} @repo=#{@repo.inspect}>)
+    end
+
     #########################################################################
     #
     # Internal Methods
@@ -388,13 +399,13 @@ module Gollum
     attr_reader :path
 
     # Gets the page class used by all instances of this Wiki.
-    attr_reader :page_class
+    attr_accessor :page_class
 
     # Gets the file class used by all instances of this Wiki.
-    attr_reader :file_class
+    attr_accessor :file_class
 
-    # Gets the markup class used by all instances of this Wiki.
-    attr_reader :markup_class
+    # Gets or Sets the markup class used by all instances of this Wiki.
+    attr_accessor :markup_class
 
     # Normalize the data.
     #
