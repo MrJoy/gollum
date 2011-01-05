@@ -51,6 +51,7 @@ Gem::Specification.new do |s|
     lib/gollum/albino.rb
     lib/gollum/blob_entry.rb
     lib/gollum/extension.rb
+    lib/gollum/extensions/gist.rb
     lib/gollum/extensions/pagelist.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
@@ -507,6 +508,7 @@ Gem::Specification.new do |s|
     test/examples/lotr.git/packed-refs
     test/examples/lotr.git/refs/heads/master
     test/helper.rb
+    test/test_extensions_gist.rb
     test/test_file.rb
     test/test_git_access.rb
     test/test_markup.rb

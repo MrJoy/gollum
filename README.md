@@ -166,6 +166,15 @@ External links must begin with either "http://" or "https://". If you need
 something more flexible, you can resort to the link syntax in the page's
 underlying markup format.
 
+## Gist embedding
+
+Links to Gists are converted to embedded gists.
+
+    {{gist 177172}}
+
+The link can also be to a specific file in the gist.
+
+    {{gist 177172|pythonway.py}}
 
 ## ABSOLUTE VS. RELATIVE VS. EXTERNAL PATH
 
