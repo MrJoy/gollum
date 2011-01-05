@@ -18,6 +18,7 @@ module Gollum
       @extensiontagmap  = {}
       @codemap = {}
       @texmap  = {}
+      @premap  = {}
     end
 
     # Render the content with Gollum wiki syntax on top of the file's own
@@ -28,11 +29,11 @@ module Gollum
     #
     # Returns the formatted String content.
     def render(no_follow = false)
-      sanitize_options = no_follow ? 
-        @wiki.history_sanitization : 
-        @wiki.sanitization
+      sanitize = no_follow ? 
+        @wiki.history_sanitizer : 
+        @wiki.sanitizer
 
-      data = extract_tex(@data)
+      data = extract_tex(@data.dup)
       data = extract_code(data)
       data = extract_tags(data)
       data = extract_extension_tags(data)
@@ -46,11 +47,20 @@ module Gollum
       end
       data = process_tags(data)
       data = process_code(data)
-      data = Sanitize.clean(data, sanitize_options.to_hash) if sanitize_options
+      if sanitize || block_given?
+        doc  = Nokogiri::HTML::DocumentFragment.parse(data)
+        doc  = sanitize.clean_node!(doc) if sanitize
+        yield doc if block_given?
+        data = doc_to_html(doc)
+      end
       data = process_extension_tags(data)
       data = process_tex(data)
       data.gsub!(/<p><\/p>/, '')
       data
+    end
+
+    def doc_to_html(doc)
+      doc.to_xhtml(:save_with => Nokogiri::XML::Node::SaveOptions::AS_XHTML)
     end
 
     #########################################################################
@@ -109,7 +119,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_tags(data)
-      data.gsub(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
+      data.gsub!(/(.?)\[\[(.+?)\]\]([^\[]?)/m) do
         if $1 == "'" && $3 != "'"
           "[[#{$2}]]#{$3}"
         elsif $2.include?('][')
@@ -120,6 +130,7 @@ module Gollum
           "#{$1}#{id}#{$3}"
         end
       end
+      data
     end
 
     # Process all tags from the tagmap and replace the placeholders with the
@@ -401,7 +412,7 @@ module Gollum
     #
     # Returns the placeholder'd String data.
     def extract_code(data)
-      data.gsub(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
+      data.gsub!(/^``` ?(.+?)\r?\n(.+?)\r?\n```\r?$/m) do
         id     = Digest::SHA1.hexdigest($2)
         cached = check_cache(:code, id)
         @codemap[id] = cached   ? 
@@ -409,6 +420,7 @@ module Gollum
           { :lang => $1, :code => $2 }
         id
       end
+      data
     end
 
     # Process all code from the codemap and replace the placeholders with the

@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), *%w[helper])
+# ~*~ encoding: utf-8 ~*~
+require File.expand_path(File.join(File.dirname(__FILE__), "helper"))
 
 context "Markup" do
   setup do
@@ -23,6 +24,31 @@ context "Markup" do
     assert_nothing_raised(defined?(Encoding) && Encoding::CompatibilityError) do
       assert wiki.page("strider").formatted_data
     end
+  end
+
+  test "Gollum::Markup#render yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    markup = Gollum::Markup.new(page)
+    markup.render do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
+  end
+
+  test "Gollum::Page#formatted_data yields a DocumentFragment" do
+    yielded = false
+    @wiki.write_page("Yielded", :markdown, "abc", commit_details)
+
+    page   = @wiki.page("Yielded")
+    page.formatted_data do |doc|
+      assert_kind_of Nokogiri::HTML::DocumentFragment, doc
+      yielded = true
+    end
+    assert yielded
   end
 
   #########################################################################
