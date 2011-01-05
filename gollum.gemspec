@@ -53,6 +53,7 @@ Gem::Specification.new do |s|
     lib/gollum/extension.rb
     lib/gollum/extensions/gist.rb
     lib/gollum/extensions/pagelist.rb
+    lib/gollum/extensions/websequencediagrams.rb
     lib/gollum/file.rb
     lib/gollum/frontend/app.rb
     lib/gollum/frontend/public/css/editbar.css
