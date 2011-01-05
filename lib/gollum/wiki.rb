@@ -358,6 +358,10 @@ module Gollum
       @access.refresh
     end
 
+    def inspect
+      %(#<#{self.class} @repo=#{@repo.inspect}>)
+    end
+
     # Public: Creates a Sanitize instance using the Wiki's sanitization 
     # options.
     #
